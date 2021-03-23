@@ -8,3 +8,5 @@
  */
 
 rootProject.name = 'base-javafx-repo'
+include 'main'
+
