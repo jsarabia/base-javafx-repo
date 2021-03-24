@@ -1,13 +1,32 @@
 .breadcrumb {
-    -fx-border-color: #CCCCCC;
+    -fx-border-color: #CCD0D6;
     -fx-border-width: 1px;
     -fx-border-radius: 3px;
     -fx-padding: 5px;
     -fx-cursor: hand;
+    -fx-pref-height: 30px;
+    -fx-text-fill: #33435B;
+    -fx-underline: true;
+}
+
+.breadcrumb .ikonli-font-icon {
+    -fx-icon-color: #33435B;
 }
 
 .breadcrumb--active {
-    -fx-background-color: #CCCCCC;
+    -fx-border-width: 0px;
+    -fx-background-color: #CDDDF4;
     -fx-background-radius: 3px;
     -fx-cursor: default;
+    -fx-text-fill: #023E97;
+    -fx-font-weight: bold;
+    -fx-underline: false;
+}
+
+.breadcrumb--active .ikonli-font-icon {
+    -fx-icon-color: #023E97;
+}
+
+.breadcrumb__arrow .ikonli-font-icon {
+    -fx-icon-color: #99A1AD;
 }

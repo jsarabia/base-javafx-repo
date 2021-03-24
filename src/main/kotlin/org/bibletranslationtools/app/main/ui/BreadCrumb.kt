@@ -32,6 +32,8 @@ class BreadCrumb: HBox() {
         }
 
         label {
+            addClass("breadcrumb__arrow")
+
             graphic = FontIcon("mdi-play")
             hiddenWhen(isLastInQueueProperty)
         }
