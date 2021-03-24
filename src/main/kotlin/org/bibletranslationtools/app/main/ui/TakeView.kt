@@ -5,11 +5,12 @@ import javafx.scene.text.FontWeight
 import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
 
-class BookView: View(), BreadcrumbComponent {
+class TakeView: View(), BreadcrumbComponent {
 
-    override val pageName = "Book"
-    override val pageIcon = FontIcon("mdi-book")
-    override val pageType = BreadcrumbType.BOOK
+    override var pageName = ""
+    override val activePageName = "Take"
+    override val pageIcon = FontIcon("fas-wave-square")
+    override val pageType = BreadcrumbType.TAKE
     override val onClick = { workspace.dock(this) }
 
     private val mainViewModel = find<MainViewModel>()
@@ -19,29 +20,38 @@ class BookView: View(), BreadcrumbComponent {
         paddingAll = 20.0
         alignment = Pos.CENTER
 
-        label("Book Page") {
+        label("Take 1 Page") {
             style {
                 fontWeight = FontWeight.BOLD
             }
         }
 
-        add(FontIcon("mdi-book:100"))
+        add(FontIcon("fas-wave-square:100"))
 
         hbox {
             spacing = 20.0
             alignment = Pos.CENTER
 
-            button("Go Home").apply {
-                graphic = FontIcon("mdi-home")
+            button("Go to Project Page").apply {
+                graphic = FontIcon("mdi-book")
                 setOnAction {
-                    workspace.dock<HomeView>()
+                    workspace.dock<ProjectView>()
                 }
             }
-            button("Go to Person Page").apply {
-                graphic = FontIcon("mdi-account")
+            button("Go to Record Page").apply {
+                graphic = FontIcon("mdi-microphone")
                 setOnAction {
-                    workspace.dock<PersonView>()
+                    mainViewModel.activeTakeProperty.set("Take 1")
+                    workspace.dock<RecordView>()
                 }
+            }
+        }
+    }
+
+    init {
+        mainViewModel.activeTakeProperty.onChange {
+            it?.let {
+                pageName = it
             }
         }
     }

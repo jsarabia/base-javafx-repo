@@ -30,3 +30,8 @@
 .breadcrumb__arrow .ikonli-font-icon {
     -fx-icon-color: #99A1AD;
 }
+
+.breadcrumb__help .ikonli-font-icon {
+    -fx-icon-color: #3B5B8F;
+    -fx-icon-size: 18px;
+}

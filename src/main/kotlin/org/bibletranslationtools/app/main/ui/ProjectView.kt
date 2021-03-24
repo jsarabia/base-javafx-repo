@@ -5,11 +5,12 @@ import javafx.scene.text.FontWeight
 import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
 
-class HomeView : View(), BreadcrumbComponent {
+class ProjectView : View(), BreadcrumbComponent {
 
-    override val pageName = "Home"
-    override val pageIcon = FontIcon("mdi-home")
-    override val pageType = BreadcrumbType.HOME
+    override var pageName = ""
+    override val activePageName = "Project"
+    override val pageIcon = FontIcon("mdi-book")
+    override val pageType = BreadcrumbType.PROJECT
     override val onClick = { workspace.dock(this) }
 
     private val mainViewModel = find<MainViewModel>()
@@ -19,18 +20,27 @@ class HomeView : View(), BreadcrumbComponent {
         paddingAll = 20.0
         alignment = Pos.CENTER
 
-        label("Home Page") {
+        label("Project Page") {
             style {
                 fontWeight = FontWeight.BOLD
             }
         }
 
-        add(FontIcon("mdi-home:100"))
+        add(FontIcon("mdi-book:100"))
 
-        button("Go to Book Page").apply {
-            graphic = FontIcon("mdi-book")
+        button("Go to Chapter 1 Page").apply {
+            graphic = FontIcon("mdi-file")
             setOnAction {
-                workspace.dock<BookView>()
+                mainViewModel.activeBookProperty.set("Genesis")
+                workspace.dock<ChapterView>()
+            }
+        }
+    }
+
+    init {
+        mainViewModel.activeBookProperty.onChange {
+            it?.let {
+                pageName = it
             }
         }
     }

@@ -5,11 +5,12 @@ import javafx.scene.text.FontWeight
 import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
 
-class AirplaneView: View(), BreadcrumbComponent {
+class ChapterView: View(), BreadcrumbComponent {
 
-    override val pageName = "Airplane"
-    override val pageIcon = FontIcon("mdi-airplane")
-    override val pageType = BreadcrumbType.AIRPLANE
+    override var pageName = ""
+    override val activePageName = "Chapter"
+    override val pageIcon = FontIcon("mdi-file")
+    override val pageType = BreadcrumbType.CHAPTER
     override val onClick = { workspace.dock(this) }
 
     private val mainViewModel = find<MainViewModel>()
@@ -19,29 +20,38 @@ class AirplaneView: View(), BreadcrumbComponent {
         paddingAll = 20.0
         alignment = Pos.CENTER
 
-        label("Airplane Page") {
+        label("Chapter 1 Page") {
             style {
                 fontWeight = FontWeight.BOLD
             }
         }
 
-        add(FontIcon("mdi-airplane:100"))
+        add(FontIcon("mdi-file:100"))
 
         hbox {
             spacing = 20.0
             alignment = Pos.CENTER
 
-            button("Go Home").apply {
-                graphic = FontIcon("mdi-home")
-                setOnAction {
-                    workspace.dock<HomeView>()
-                }
-            }
-            button("Go to Book Page").apply {
+            button("Go to Project Page").apply {
                 graphic = FontIcon("mdi-book")
                 setOnAction {
-                    workspace.dock<BookView>()
+                    workspace.dock<ProjectView>()
                 }
+            }
+            button("Go to Chunk 1 Page").apply {
+                graphic = FontIcon("mdi-bookmark")
+                setOnAction {
+                    mainViewModel.activeChapterProperty.set("Chapter 1")
+                    workspace.dock<ChunkView>()
+                }
+            }
+        }
+    }
+
+    init {
+        mainViewModel.activeChapterProperty.onChange {
+            it?.let {
+                pageName = it
             }
         }
     }

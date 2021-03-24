@@ -19,6 +19,6 @@ class RootView : View() {
     }
 
     override fun onDock() {
-        workspace.dock<HomeView>()
+        workspace.dock<ProjectView>()
     }
 }

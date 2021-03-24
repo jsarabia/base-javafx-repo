@@ -23,7 +23,8 @@ class BreadCrumbs<T>(private val breadcrumbs: ObservableList<T>): HBox() {
                         BreadCrumb().apply {
                             iconProperty.set(_crumb.pageIcon)
                             titleProperty.set(_crumb.pageName)
-                            isLastInQueueProperty.set(isLast(_crumb))
+                            activeTitleProperty.set(_crumb.activePageName)
+                            isActiveProperty.set(isActive(_crumb))
                             setOnMouseClicked {
                                 _crumb.onClick()
                             }
@@ -34,7 +35,7 @@ class BreadCrumbs<T>(private val breadcrumbs: ObservableList<T>): HBox() {
         }
     }
 
-    private fun isLast(breadcrumb: BreadcrumbComponent): Boolean {
+    private fun isActive(breadcrumb: BreadcrumbComponent): Boolean {
         return breadcrumbs.indexOf(breadcrumb) == (breadcrumbs.size - 1)
     }
 }

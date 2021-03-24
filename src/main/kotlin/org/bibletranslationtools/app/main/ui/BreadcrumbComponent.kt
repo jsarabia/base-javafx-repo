@@ -3,14 +3,16 @@ package org.bibletranslationtools.app.main.ui
 import org.kordamp.ikonli.javafx.FontIcon
 
 enum class BreadcrumbType {
-    HOME,
-    BOOK,
-    PERSON,
-    AIRPLANE
+    PROJECT,
+    CHAPTER,
+    CHUNK,
+    TAKE,
+    RECORD
 }
 
 interface BreadcrumbComponent {
-    val pageName: String
+    var pageName: String
+    val activePageName: String
     val pageIcon: FontIcon
     val pageType: BreadcrumbType
     val onClick: () -> Unit

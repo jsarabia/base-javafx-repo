@@ -1,12 +1,12 @@
 package org.bibletranslationtools.app.main.ui
 
+import javafx.beans.binding.Bindings
+import javafx.beans.binding.StringBinding
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
-import javafx.scene.Cursor
 import javafx.scene.layout.HBox
-import javafx.scene.paint.Paint
 import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
 
@@ -14,7 +14,8 @@ class BreadCrumb: HBox() {
 
     val iconProperty = SimpleObjectProperty<FontIcon>()
     val titleProperty = SimpleStringProperty()
-    val isLastInQueueProperty = SimpleBooleanProperty(false)
+    val activeTitleProperty = SimpleStringProperty()
+    val isActiveProperty = SimpleBooleanProperty(false)
 
     init {
         spacing = 5.0
@@ -22,11 +23,11 @@ class BreadCrumb: HBox() {
 
         label {
             graphicProperty().bind(iconProperty)
-            textProperty().bind(titleProperty)
+            textProperty().bind(titleBinding())
 
             addClass("breadcrumb")
 
-            isLastInQueueProperty.onChange {
+            isActiveProperty.onChange {
                 if (it) addClass("breadcrumb--active") else removeClass("breadcrumb--active")
             }
         }
@@ -35,7 +36,31 @@ class BreadCrumb: HBox() {
             addClass("breadcrumb__arrow")
 
             graphic = FontIcon("mdi-play")
-            hiddenWhen(isLastInQueueProperty)
+            hiddenWhen(isActiveProperty)
+            managedWhen(visibleProperty())
         }
+
+        label {
+            addClass("breadcrumb__help")
+
+            graphic = FontIcon("mdi-help-circle")
+            visibleWhen(isActiveProperty)
+            managedWhen(visibleProperty())
+        }
+    }
+
+    private fun titleBinding(): StringBinding {
+        return Bindings.createStringBinding(
+            {
+                if (isActiveProperty.value) {
+                    activeTitleProperty.value
+                } else {
+                    titleProperty.value
+                }
+            },
+            titleProperty,
+            activeTitleProperty,
+            isActiveProperty
+        )
     }
 }

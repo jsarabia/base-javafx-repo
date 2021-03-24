@@ -1,10 +1,15 @@
 package org.bibletranslationtools.app.main.ui
 
+import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
 
 class MainViewModel: ViewModel() {
 
     val breadcrumbs = observableListOf<BreadcrumbComponent>()
+    val activeBookProperty = SimpleStringProperty()
+    val activeChapterProperty = SimpleStringProperty()
+    val activeChunkProperty = SimpleStringProperty()
+    val activeTakeProperty = SimpleStringProperty()
 
     fun addBreadcrumb(page: BreadcrumbComponent) {
         if (breadcrumbs.contains(page)) return
