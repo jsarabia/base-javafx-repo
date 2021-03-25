@@ -52,6 +52,12 @@ class RecordView: View(), BreadcrumbComponent {
                     workspace.dock<ChapterView>()
                 }
             }
+            button("Go to No Record Page").apply {
+                graphic = FontIcon(MaterialDesign.MDI_MICROPHONE_OFF)
+                setOnAction {
+                    workspace.dock<NoRecordView>()
+                }
+            }
         }
     }
 
