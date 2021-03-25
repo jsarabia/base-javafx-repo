@@ -1,5 +1,6 @@
 package org.bibletranslationtools.app.main.ui
 
+import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
 import javafx.scene.text.FontWeight
 import org.kordamp.ikonli.javafx.FontIcon
@@ -8,10 +9,12 @@ import tornadofx.*
 
 class ProjectView : View(), BreadcrumbComponent {
 
-    override var pageName = ""
-    override val activePageName = "Project"
-    override val pageIcon = FontIcon(MaterialDesign.MDI_BOOK)
-    override val pageType = BreadcrumbType.PROJECT
+    private val nameProperty = SimpleStringProperty()
+
+    override val name: String by nameProperty
+    override val defaultName = "Project"
+    override val graphic = FontIcon(MaterialDesign.MDI_BOOK)
+    override val type = BreadcrumbType.PROJECT
     override val onClick = { workspace.dock(this) }
 
     private val mainViewModel = find<MainViewModel>()
@@ -43,11 +46,7 @@ class ProjectView : View(), BreadcrumbComponent {
     }
 
     init {
-        mainViewModel.activeBookProperty.onChange {
-            it?.let {
-                pageName = it
-            }
-        }
+        nameProperty.bind(mainViewModel.activeBookProperty)
     }
 
     override fun onDock() {

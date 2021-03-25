@@ -24,9 +24,9 @@ class BreadCrumbs<T>(private val breadcrumbs: ObservableList<T>): HBox() {
                 crumb?.let { _crumb ->
                     add(
                         BreadCrumb().apply {
-                            iconProperty.set(_crumb.pageIcon)
-                            titleProperty.set(_crumb.pageName)
-                            activeTitleProperty.set(_crumb.activePageName)
+                            iconProperty.set(_crumb.graphic)
+                            titleProperty.set(_crumb.name)
+                            activeTitleProperty.set(_crumb.defaultName)
                             isActiveProperty.set(isActive(_crumb))
                             setOnMouseClicked {
                                 _crumb.onClick()

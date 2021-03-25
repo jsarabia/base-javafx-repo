@@ -1,5 +1,6 @@
 package org.bibletranslationtools.app.main.ui
 
+import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
 import javafx.scene.text.FontWeight
 import org.kordamp.ikonli.javafx.FontIcon
@@ -8,10 +9,12 @@ import tornadofx.*
 
 class RecordView: View(), BreadcrumbComponent {
 
-    override var pageName = ""
-    override val activePageName = "Record"
-    override val pageIcon = FontIcon(MaterialDesign.MDI_MICROPHONE)
-    override val pageType = BreadcrumbType.RECORD
+    private val nameProperty = SimpleStringProperty()
+
+    override val name: String by nameProperty
+    override val defaultName = "Record"
+    override val graphic = FontIcon(MaterialDesign.MDI_MICROPHONE)
+    override val type = BreadcrumbType.RECORD
     override val onClick = { workspace.dock(this) }
 
     private val mainViewModel = find<MainViewModel>()

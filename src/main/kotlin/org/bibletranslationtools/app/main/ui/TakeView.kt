@@ -1,5 +1,6 @@
 package org.bibletranslationtools.app.main.ui
 
+import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
 import javafx.scene.text.FontWeight
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid
@@ -9,10 +10,12 @@ import tornadofx.*
 
 class TakeView: View(), BreadcrumbComponent {
 
-    override var pageName = ""
-    override val activePageName = "Take"
-    override val pageIcon = FontIcon(FontAwesomeSolid.WAVE_SQUARE)
-    override val pageType = BreadcrumbType.TAKE
+    private val nameProperty = SimpleStringProperty()
+
+    override val name: String by nameProperty
+    override val defaultName = "Take"
+    override val graphic = FontIcon(FontAwesomeSolid.WAVE_SQUARE)
+    override val type = BreadcrumbType.TAKE
     override val onClick = { workspace.dock(this) }
 
     private val mainViewModel = find<MainViewModel>()
@@ -55,11 +58,7 @@ class TakeView: View(), BreadcrumbComponent {
     }
 
     init {
-        mainViewModel.activeTakeProperty.onChange {
-            it?.let {
-                pageName = it
-            }
-        }
+        nameProperty.bind(mainViewModel.activeTakeProperty)
     }
 
     override fun onDock() {

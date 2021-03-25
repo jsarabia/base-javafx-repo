@@ -1,5 +1,6 @@
 package org.bibletranslationtools.app.main.ui
 
+import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
 import javafx.scene.text.FontWeight
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid
@@ -9,10 +10,12 @@ import tornadofx.*
 
 class ChunkView: View(), BreadcrumbComponent {
 
-    override var pageName = ""
-    override val activePageName = "Chunk"
-    override val pageIcon = FontIcon(MaterialDesign.MDI_BOOKMARK)
-    override val pageType = BreadcrumbType.CHUNK
+    private val nameProperty = SimpleStringProperty()
+
+    override val name: String by nameProperty
+    override val defaultName = "Chunk"
+    override val graphic = FontIcon(MaterialDesign.MDI_BOOKMARK)
+    override val type = BreadcrumbType.CHUNK
     override val onClick = { workspace.dock(this) }
 
     private val mainViewModel = find<MainViewModel>()
@@ -55,11 +58,7 @@ class ChunkView: View(), BreadcrumbComponent {
     }
 
     init {
-        mainViewModel.activeChunkProperty.onChange {
-            it?.let {
-                pageName = it
-            }
-        }
+        nameProperty.bind(mainViewModel.activeChunkProperty)
     }
 
     override fun onDock() {

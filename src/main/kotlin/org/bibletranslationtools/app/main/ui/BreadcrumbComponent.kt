@@ -11,9 +11,9 @@ enum class BreadcrumbType {
 }
 
 interface BreadcrumbComponent {
-    var pageName: String
-    val activePageName: String
-    val pageIcon: FontIcon
-    val pageType: BreadcrumbType
+    val name: String
+    val defaultName: String
+    val graphic: FontIcon
+    val type: BreadcrumbType
     val onClick: () -> Unit
 }
