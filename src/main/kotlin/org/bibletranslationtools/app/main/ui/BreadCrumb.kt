@@ -33,6 +33,8 @@ class BreadCrumb: HBox() {
             isActiveProperty.onChange {
                 if (it) addClass("breadcrumb--active") else removeClass("breadcrumb--active")
             }
+
+            onMouseClickedProperty().bind(onClickProperty)
         }
 
         label {
@@ -50,8 +52,6 @@ class BreadCrumb: HBox() {
             visibleWhen(isActiveProperty)
             managedWhen(visibleProperty())
         }
-
-        onMouseClickedProperty().bind(onClickProperty)
     }
 
     fun onClickAction(op: () -> Unit) {
