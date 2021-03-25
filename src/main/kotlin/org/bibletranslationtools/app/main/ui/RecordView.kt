@@ -3,13 +3,14 @@ package org.bibletranslationtools.app.main.ui
 import javafx.geometry.Pos
 import javafx.scene.text.FontWeight
 import org.kordamp.ikonli.javafx.FontIcon
+import org.kordamp.ikonli.materialdesign.MaterialDesign
 import tornadofx.*
 
 class RecordView: View(), BreadcrumbComponent {
 
     override var pageName = ""
     override val activePageName = "Record"
-    override val pageIcon = FontIcon("mdi-microphone")
+    override val pageIcon = FontIcon(MaterialDesign.MDI_MICROPHONE)
     override val pageType = BreadcrumbType.RECORD
     override val onClick = { workspace.dock(this) }
 
@@ -26,20 +27,24 @@ class RecordView: View(), BreadcrumbComponent {
             }
         }
 
-        add(FontIcon("mdi-microphone:100"))
+        add(
+            FontIcon(MaterialDesign.MDI_MICROPHONE).also {
+                it.iconSize = 100
+            }
+        )
 
         hbox {
             spacing = 20.0
             alignment = Pos.CENTER
 
             button("Go to Project Page").apply {
-                graphic = FontIcon("mdi-book")
+                graphic = FontIcon(MaterialDesign.MDI_BOOK)
                 setOnAction {
                     workspace.dock<ProjectView>()
                 }
             }
             button("Go to Chapter 1 Page").apply {
-                graphic = FontIcon("mdi-file")
+                graphic = FontIcon(MaterialDesign.MDI_FILE)
                 setOnAction {
                     workspace.dock<ChapterView>()
                 }

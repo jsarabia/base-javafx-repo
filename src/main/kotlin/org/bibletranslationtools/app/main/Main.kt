@@ -8,8 +8,9 @@ class DemoApp: App(RootView::class) {
     override fun start(stage: Stage) {
         super.start(stage)
 
-        stage.minWidth = 800.0
-        stage.minHeight = 600.0
+        stage.minWidth = 300.0
+        stage.width = 800.0
+        stage.minHeight = 350.0
     }
 }
 

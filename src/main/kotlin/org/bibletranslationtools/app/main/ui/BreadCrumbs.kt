@@ -2,6 +2,7 @@ package org.bibletranslationtools.app.main.ui
 
 import javafx.collections.ObservableList
 import javafx.scene.layout.HBox
+import javafx.scene.paint.Paint
 import tornadofx.*
 
 class BreadCrumbs<T>(private val breadcrumbs: ObservableList<T>): HBox() {
@@ -11,6 +12,8 @@ class BreadCrumbs<T>(private val breadcrumbs: ObservableList<T>): HBox() {
 
         style {
             padding = box(10.px)
+            borderWidth += box(1.px)
+            borderColor += box(Paint.valueOf("#ccc"))
         }
 
         breadcrumbs.onChange {

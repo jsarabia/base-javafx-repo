@@ -2,14 +2,16 @@ package org.bibletranslationtools.app.main.ui
 
 import javafx.geometry.Pos
 import javafx.scene.text.FontWeight
+import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid
 import org.kordamp.ikonli.javafx.FontIcon
+import org.kordamp.ikonli.materialdesign.MaterialDesign
 import tornadofx.*
 
 class ChunkView: View(), BreadcrumbComponent {
 
     override var pageName = ""
     override val activePageName = "Chunk"
-    override val pageIcon = FontIcon("mdi-bookmark")
+    override val pageIcon = FontIcon(MaterialDesign.MDI_BOOKMARK)
     override val pageType = BreadcrumbType.CHUNK
     override val onClick = { workspace.dock(this) }
 
@@ -26,20 +28,24 @@ class ChunkView: View(), BreadcrumbComponent {
             }
         }
 
-        add(FontIcon("mdi-bookmark:100"))
+        add(
+            FontIcon(MaterialDesign.MDI_BOOKMARK).also {
+                it.iconSize = 100
+            }
+        )
 
         hbox {
             spacing = 20.0
             alignment = Pos.CENTER
 
             button("Go to Project Page").apply {
-                graphic = FontIcon("mdi-book")
+                graphic = FontIcon(MaterialDesign.MDI_BOOK)
                 setOnAction {
                     workspace.dock<ProjectView>()
                 }
             }
             button("Go to Take 1 Page").apply {
-                graphic = FontIcon("fas-wave-square")
+                graphic = FontIcon(FontAwesomeSolid.WAVE_SQUARE)
                 setOnAction {
                     mainViewModel.activeChunkProperty.set("Chunk 1")
                     workspace.dock<TakeView>()
