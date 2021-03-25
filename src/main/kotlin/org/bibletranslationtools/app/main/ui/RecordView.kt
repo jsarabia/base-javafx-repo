@@ -3,21 +3,24 @@ package org.bibletranslationtools.app.main.ui
 import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
 import javafx.scene.text.FontWeight
+import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid
 import org.kordamp.ikonli.javafx.FontIcon
 import org.kordamp.ikonli.materialdesign.MaterialDesign
 import tornadofx.*
 
-class RecordView: View(), BreadcrumbComponent {
+class RecordView: View() {
 
+    private val navigator: Navigator by inject()
     private val nameProperty = SimpleStringProperty()
 
-    override val name: String by nameProperty
-    override val defaultName = "Record"
-    override val graphic = FontIcon(MaterialDesign.MDI_MICROPHONE)
-    override val type = BreadcrumbType.RECORD
-    override val onClick = { workspace.dock(this) }
-
-    private val mainViewModel = find<MainViewModel>()
+    private val breadCrumb = BreadCrumb().apply {
+        titleProperty.bind(this@RecordView.nameProperty)
+        activeTitleProperty.set("Record")
+        iconProperty.set(FontIcon(MaterialDesign.MDI_MICROPHONE))
+        onClickAction {
+            navigator.dock<RecordView>()
+        }
+    }
 
     override val root = vbox {
         spacing = 20.0
@@ -43,19 +46,19 @@ class RecordView: View(), BreadcrumbComponent {
             button("Go to Project Page").apply {
                 graphic = FontIcon(MaterialDesign.MDI_BOOK)
                 setOnAction {
-                    workspace.dock<ProjectView>()
+                    navigator.dock<ProjectView>()
                 }
             }
             button("Go to Chapter 1 Page").apply {
                 graphic = FontIcon(MaterialDesign.MDI_FILE)
                 setOnAction {
-                    workspace.dock<ChapterView>()
+                    navigator.dock<ChapterView>()
                 }
             }
             button("Go to No Record Page").apply {
                 graphic = FontIcon(MaterialDesign.MDI_MICROPHONE_OFF)
                 setOnAction {
-                    workspace.dock<NoRecordView>()
+                    navigator.dock<NoRecordView>()
                 }
             }
         }
@@ -63,7 +66,6 @@ class RecordView: View(), BreadcrumbComponent {
 
     override fun onDock() {
         super.onDock()
-        mainViewModel.addBreadcrumb(this)
-        mainViewModel.removeBreadcrumbsAfter(this)
+        navigator.dock(this, breadCrumb)
     }
 }

@@ -7,17 +7,21 @@ import org.kordamp.ikonli.javafx.FontIcon
 import org.kordamp.ikonli.materialdesign.MaterialDesign
 import tornadofx.*
 
-class ChapterView: View(), BreadcrumbComponent {
+class ChapterView: View() {
 
     private val nameProperty = SimpleStringProperty()
 
-    override val name: String by nameProperty
-    override val defaultName = "Chapter"
-    override val graphic = FontIcon(MaterialDesign.MDI_FILE)
-    override val type = BreadcrumbType.CHAPTER
-    override val onClick = { workspace.dock(this) }
+    private val breadCrumb = BreadCrumb().apply {
+        titleProperty.bind(this@ChapterView.nameProperty)
+        activeTitleProperty.set("Chapter")
+        iconProperty.set(FontIcon(MaterialDesign.MDI_FILE))
+        onClickAction {
+            navigator.dock<ChapterView>()
+        }
+    }
 
     private val mainViewModel = find<MainViewModel>()
+    private val navigator: Navigator by inject()
 
     override val root = vbox {
         spacing = 20.0
@@ -43,14 +47,14 @@ class ChapterView: View(), BreadcrumbComponent {
             button("Go to Project Page").apply {
                 graphic = FontIcon(MaterialDesign.MDI_BOOK)
                 setOnAction {
-                    workspace.dock<ProjectView>()
+                    navigator.dock<ProjectView>()
                 }
             }
             button("Go to Chunk 1 Page").apply {
                 graphic = FontIcon(MaterialDesign.MDI_BOOKMARK)
                 setOnAction {
                     mainViewModel.activeChapterProperty.set("Chapter 1")
-                    workspace.dock<ChunkView>()
+                    navigator.dock<ChunkView>()
                 }
             }
         }
@@ -62,7 +66,6 @@ class ChapterView: View(), BreadcrumbComponent {
 
     override fun onDock() {
         super.onDock()
-        mainViewModel.addBreadcrumb(this)
-        mainViewModel.removeBreadcrumbsAfter(this)
+        navigator.dock(this, breadCrumb)
     }
 }

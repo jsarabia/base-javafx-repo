@@ -7,17 +7,21 @@ import org.kordamp.ikonli.javafx.FontIcon
 import org.kordamp.ikonli.materialdesign.MaterialDesign
 import tornadofx.*
 
-class ProjectView : View(), BreadcrumbComponent {
+class ProjectView : View() {
 
     private val nameProperty = SimpleStringProperty()
 
-    override val name: String by nameProperty
-    override val defaultName = "Project"
-    override val graphic = FontIcon(MaterialDesign.MDI_BOOK)
-    override val type = BreadcrumbType.PROJECT
-    override val onClick = { workspace.dock(this) }
+    private val breadCrumb = BreadCrumb().apply {
+        titleProperty.bind(this@ProjectView.nameProperty)
+        activeTitleProperty.set("Project")
+        iconProperty.set(FontIcon(MaterialDesign.MDI_BOOK))
+        onClickAction {
+            navigator.dock<ProjectView>()
+        }
+    }
 
     private val mainViewModel = find<MainViewModel>()
+    private val navigator: Navigator by inject()
 
     override val root = vbox {
         spacing = 20.0
@@ -40,7 +44,7 @@ class ProjectView : View(), BreadcrumbComponent {
             graphic = FontIcon(MaterialDesign.MDI_FILE)
             setOnAction {
                 mainViewModel.activeBookProperty.set("Genesis")
-                workspace.dock<ChapterView>()
+                navigator.dock<ChapterView>()
             }
         }
     }
@@ -51,7 +55,6 @@ class ProjectView : View(), BreadcrumbComponent {
 
     override fun onDock() {
         super.onDock()
-        mainViewModel.addBreadcrumb(this)
-        mainViewModel.removeBreadcrumbsAfter(this)
+        navigator.dock(this, breadCrumb)
     }
 }

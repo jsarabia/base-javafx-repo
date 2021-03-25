@@ -5,7 +5,9 @@ import javafx.beans.binding.StringBinding
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
+import javafx.event.EventHandler
 import javafx.geometry.Pos
+import javafx.scene.input.MouseEvent
 import javafx.scene.layout.HBox
 import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
@@ -16,6 +18,7 @@ class BreadCrumb: HBox() {
     val titleProperty = SimpleStringProperty()
     val activeTitleProperty = SimpleStringProperty()
     val isActiveProperty = SimpleBooleanProperty(false)
+    val onClickProperty = SimpleObjectProperty<EventHandler<MouseEvent>>()
 
     init {
         spacing = 5.0
@@ -47,6 +50,12 @@ class BreadCrumb: HBox() {
             visibleWhen(isActiveProperty)
             managedWhen(visibleProperty())
         }
+
+        onMouseClickedProperty().bind(onClickProperty)
+    }
+
+    fun onClickAction(op: () -> Unit) {
+        onClickProperty.set(EventHandler { op() })
     }
 
     private fun titleBinding(): StringBinding {

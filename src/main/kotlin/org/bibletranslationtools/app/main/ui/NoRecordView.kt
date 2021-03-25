@@ -8,6 +8,8 @@ import tornadofx.*
 
 class NoRecordView: View() {
 
+    private val navigator: Navigator by inject()
+
     override val root = vbox {
         spacing = 20.0
         paddingAll = 20.0
@@ -32,7 +34,7 @@ class NoRecordView: View() {
             button("Go to Project Page").apply {
                 graphic = FontIcon(MaterialDesign.MDI_BOOK)
                 setOnAction {
-                    workspace.dock<ProjectView>()
+                    navigator.dock<ProjectView>()
                 }
             }
         }

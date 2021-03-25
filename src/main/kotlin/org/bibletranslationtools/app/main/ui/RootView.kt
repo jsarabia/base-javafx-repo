@@ -4,7 +4,7 @@ import tornadofx.*
 
 class RootView : View() {
 
-    private val mainViewModel = find<MainViewModel>()
+    private val navigator: Navigator by inject()
 
     init {
         importStylesheet(javaClass.getResource("/css/my.css").toExternalForm())
@@ -12,13 +12,13 @@ class RootView : View() {
     }
 
     override val root = vbox {
-        add(BreadCrumbs(mainViewModel.breadcrumbs))
+        add(navigator.breadCrumbsBar)
         add(
             workspace.root
         )
     }
 
     override fun onDock() {
-        workspace.dock<ProjectView>()
+        navigator.dock<ProjectView>()
     }
 }

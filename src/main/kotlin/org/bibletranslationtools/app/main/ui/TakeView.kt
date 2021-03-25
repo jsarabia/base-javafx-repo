@@ -8,17 +8,21 @@ import org.kordamp.ikonli.javafx.FontIcon
 import org.kordamp.ikonli.materialdesign.MaterialDesign
 import tornadofx.*
 
-class TakeView: View(), BreadcrumbComponent {
+class TakeView: View() {
 
     private val nameProperty = SimpleStringProperty()
 
-    override val name: String by nameProperty
-    override val defaultName = "Take"
-    override val graphic = FontIcon(FontAwesomeSolid.WAVE_SQUARE)
-    override val type = BreadcrumbType.TAKE
-    override val onClick = { workspace.dock(this) }
+    private val breadCrumb = BreadCrumb().apply {
+        titleProperty.bind(this@TakeView.nameProperty)
+        activeTitleProperty.set("Take")
+        iconProperty.set(FontIcon(FontAwesomeSolid.WAVE_SQUARE))
+        onClickAction {
+            navigator.dock(this@TakeView, this)
+        }
+    }
 
     private val mainViewModel = find<MainViewModel>()
+    private val navigator: Navigator by inject()
 
     override val root = vbox {
         spacing = 20.0
@@ -44,14 +48,14 @@ class TakeView: View(), BreadcrumbComponent {
             button("Go to Project Page").apply {
                 graphic = FontIcon(MaterialDesign.MDI_BOOK)
                 setOnAction {
-                    workspace.dock<ProjectView>()
+                    navigator.dock<ProjectView>()
                 }
             }
             button("Go to Record Page").apply {
                 graphic = FontIcon(MaterialDesign.MDI_MICROPHONE)
                 setOnAction {
                     mainViewModel.activeTakeProperty.set("Take 1")
-                    workspace.dock<RecordView>()
+                    navigator.dock<RecordView>()
                 }
             }
         }
@@ -63,7 +67,6 @@ class TakeView: View(), BreadcrumbComponent {
 
     override fun onDock() {
         super.onDock()
-        mainViewModel.addBreadcrumb(this)
-        mainViewModel.removeBreadcrumbsAfter(this)
+        navigator.dock(this, breadCrumb)
     }
 }
