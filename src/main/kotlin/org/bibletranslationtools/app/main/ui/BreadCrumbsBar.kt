@@ -29,18 +29,18 @@ class BreadCrumbsBar: HBox() {
         }
     }
 
-    fun add(item: BreadCrumb) {
+    fun addItem(item: BreadCrumb) {
         if (items.contains(item).not()) {
             items.add(item)
         }
-        removeAfter(item)
+        removeItemAfter(item)
     }
 
-    fun remove(item: BreadCrumb) {
+    fun removeItem(item: BreadCrumb) {
         items.remove(item)
     }
 
-    private fun removeAfter(item: BreadCrumb) {
+    private fun removeItemAfter(item: BreadCrumb) {
         val fromIndex = items.indexOf(item) + 1
         items.remove(fromIndex, items.size)
     }

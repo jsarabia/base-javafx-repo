@@ -13,7 +13,7 @@ class Navigator: Component(), ScopedInstance {
 
     fun dock(view: UIComponent, breadCrumb: BreadCrumb? = null) {
         breadCrumb?.let {
-            breadCrumbsBar.add(it)
+            breadCrumbsBar.addItem(it)
         }
         workspace.dock(view)
     }
