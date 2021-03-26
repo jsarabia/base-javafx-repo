@@ -17,4 +17,12 @@ class Navigator: Component(), ScopedInstance {
         }
         workspace.dock(view)
     }
+
+    fun back() {
+        workspace.navigateBack()
+    }
+
+    fun forward() {
+        workspace.navigateForward()
+    }
 }

@@ -13,6 +13,21 @@ class RootView : View() {
 
     override val root = vbox {
         add(navigator.breadCrumbsBar)
+        hbox {
+            spacing = 10.0
+            paddingAll = 10.0
+
+            button("Back") {
+                setOnAction {
+                    navigator.back()
+                }
+            }
+            button("Forward") {
+                setOnAction {
+                    navigator.forward()
+                }
+            }
+        }
         add(
             workspace.root
         )
