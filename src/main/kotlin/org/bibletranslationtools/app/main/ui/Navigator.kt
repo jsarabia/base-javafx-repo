@@ -15,7 +15,9 @@ class Navigator: Component(), ScopedInstance {
         breadCrumb?.let {
             breadCrumbsBar.addItem(it)
         }
-        workspace.dock(view)
+        if (workspace.dockedComponent != view) {
+            workspace.dock(view)
+        }
     }
 
     fun back() {
