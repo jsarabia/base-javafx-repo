@@ -8,7 +8,7 @@ class RootView : View() {
 
     init {
         importStylesheet(javaClass.getResource("/css/my.css").toExternalForm())
-        workspace.root.header.hide()
+        workspace.header.removeFromParent()
     }
 
     override val root = vbox {
@@ -28,9 +28,7 @@ class RootView : View() {
                 }
             }
         }
-        add(
-            workspace.root
-        )
+        add(workspace)
     }
 
     override fun onDock() {
