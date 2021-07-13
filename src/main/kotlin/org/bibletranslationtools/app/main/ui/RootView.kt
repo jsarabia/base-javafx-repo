@@ -1,37 +1,114 @@
 package org.bibletranslationtools.app.main.ui
 
+import javafx.scene.control.Label
+import javafx.scene.control.Tooltip
+import org.kordamp.ikonli.javafx.FontIcon
+import org.kordamp.ikonli.materialdesign.MaterialDesign
 import tornadofx.*
 
 class RootView : View() {
 
-    private val navigator: Navigator by inject()
+    val viewModel: RootViewModel by inject()
 
     init {
-        importStylesheet(javaClass.getResource("/css/my.css").toExternalForm())
-        workspace.header.removeFromParent()
+        importStylesheet(resources.get("/css/my.css"))
     }
 
     override val root = vbox {
-        add(navigator.breadCrumbsBar)
-        hbox {
-            spacing = 10.0
-            paddingAll = 10.0
+        addClass("main")
 
-            button("Back") {
-                setOnAction {
-                    navigator.back()
+        hbox {
+            spacing = 20.0
+            vbox {
+                addClass("player")
+                spacing = 20.0
+
+                label("Playback") {
+                    addClass("title")
+                }
+                combobox(viewModel.selectedPlayer, viewModel.players) {
+                    addClass("dropdown")
+                    cellFormat {
+                        graphic = Label().apply {
+                            text = it.name
+                            graphic = FontIcon(MaterialDesign.MDI_PLAY)
+                            tooltip = Tooltip(it.description)
+                        }
+                    }
+                    selectionModel.selectedItemProperty().onChange {
+                        it?.let {
+                            viewModel.setPlayer(it)
+                        }
+                    }
+                }
+
+                hbox {
+                    spacing = 10.0
+                    button("Play", FontIcon(MaterialDesign.MDI_PLAY)) {
+                        addClass("btn", "btn--primary")
+                        action { viewModel.play() }
+                        disableProperty().bind(viewModel.isPlayingProperty)
+                    }
+                    button("Stop", FontIcon(MaterialDesign.MDI_STOP)) {
+                        addClass("btn", "btn--secondary")
+                        action { viewModel.stop() }
+                        disableProperty().bind(viewModel.isPlayingProperty.not())
+                    }
                 }
             }
-            button("Forward") {
-                setOnAction {
-                    navigator.forward()
+
+            vbox {
+                addClass("recorder")
+                spacing = 20.0
+
+                label("Recording") {
+                    addClass("title")
+                }
+                combobox(viewModel.selectedRecorder, viewModel.recorders) {
+                    addClass("dropdown")
+                    cellFormat {
+                        graphic = Label().apply {
+                            text = it.name
+                            graphic = FontIcon(MaterialDesign.MDI_MICROPHONE)
+                            tooltip = Tooltip(it.description)
+                        }
+                    }
+                    selectionModel.selectedItemProperty().onChange {
+                        it?.let {
+                            viewModel.setRecorder(it)
+                        }
+                    }
+                }
+
+                hbox {
+                    spacing = 10.0
+                    button("Record", FontIcon(MaterialDesign.MDI_RECORD)) {
+                        addClass("btn", "btn--primary", "btn--danger")
+                        action { viewModel.recordAudio() }
+                        disableProperty().bind(
+                            viewModel.isRecordingProperty
+                                .or(viewModel.isRecorderPlayingProperty)
+                        )
+                    }
+                    button("Play", FontIcon(MaterialDesign.MDI_PLAY)) {
+                        addClass("btn", "btn--primary")
+                        action { viewModel.playRecording() }
+                        disableProperty().bind(
+                            viewModel.isRecorderPlayingProperty
+                                .or(viewModel.isRecordingProperty)
+                        )
+                    }
+                    button("Stop", FontIcon(MaterialDesign.MDI_STOP)) {
+                        addClass("btn", "btn--secondary")
+                        action { viewModel.stopRecording() }
+                        disableProperty().bind(
+                            viewModel.isRecorderPlayingProperty
+                                .not()
+                                .and(viewModel.isRecordingProperty.not())
+                        )
+                    }
                 }
             }
         }
-        add(workspace)
-    }
-
-    override fun onDock() {
-        navigator.dock<ProjectView>()
     }
 }

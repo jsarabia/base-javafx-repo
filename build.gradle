@@ -18,6 +18,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
     id 'org.openjfx.javafxplugin' version "$javafx_plugin_version"
+    id "com.github.johnrengelman.shadow" version "5.2.0"
 }
 
 apply plugin: 'kotlin'
@@ -69,4 +70,18 @@ compileTestKotlin {
 javafx {
     version = "$javafx_version"
     modules = ['javafx.controls', 'javafx.fxml']
+}
+
+application {
+    mainClassName = "org.bibletranslationtools.app.main.MainKt"
+}
+
+shadowJar {
+    archiveFileName = "${rootProject.name}.jar"
+    mergeServiceFiles()
+    manifest {
+        attributes(
+                'Main-Class': "org.bibletranslationtools.app.main.MainKt"
+        )
+    }
 }
