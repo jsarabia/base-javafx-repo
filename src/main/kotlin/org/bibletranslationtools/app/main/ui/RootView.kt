@@ -37,7 +37,7 @@ class RootView : View() {
                     }
                     selectionModel.selectedItemProperty().onChange {
                         it?.let {
-                            viewModel.setPlayer(it)
+                            viewModel.setPlayMixer(it)
                         }
                     }
                 }
@@ -47,7 +47,11 @@ class RootView : View() {
                     button("Play", FontIcon(MaterialDesign.MDI_PLAY)) {
                         addClass("btn", "btn--primary")
                         action { viewModel.play() }
-                        disableProperty().bind(viewModel.isPlayingProperty)
+                        disableProperty().bind(
+                            viewModel.isPlayingProperty
+                                .or(viewModel.isRecordingProperty)
+                                .or(viewModel.playerProperty.isNull)
+                        )
                     }
                     button("Stop", FontIcon(MaterialDesign.MDI_STOP)) {
                         addClass("btn", "btn--secondary")
@@ -75,7 +79,7 @@ class RootView : View() {
                     }
                     selectionModel.selectedItemProperty().onChange {
                         it?.let {
-                            viewModel.setRecorder(it)
+                            viewModel.setRecordMixer(it)
                         }
                     }
                 }
@@ -84,28 +88,16 @@ class RootView : View() {
                     spacing = 10.0
                     button("Record", FontIcon(MaterialDesign.MDI_RECORD)) {
                         addClass("btn", "btn--primary", "btn--danger")
-                        action { viewModel.recordAudio() }
+                        action { viewModel.record() }
                         disableProperty().bind(
                             viewModel.isRecordingProperty
-                                .or(viewModel.isRecorderPlayingProperty)
-                        )
-                    }
-                    button("Play", FontIcon(MaterialDesign.MDI_PLAY)) {
-                        addClass("btn", "btn--primary")
-                        action { viewModel.playRecording() }
-                        disableProperty().bind(
-                            viewModel.isRecorderPlayingProperty
-                                .or(viewModel.isRecordingProperty)
+                                .or(viewModel.isPlayingProperty)
                         )
                     }
                     button("Stop", FontIcon(MaterialDesign.MDI_STOP)) {
                         addClass("btn", "btn--secondary")
-                        action { viewModel.stopRecording() }
-                        disableProperty().bind(
-                            viewModel.isRecorderPlayingProperty
-                                .not()
-                                .and(viewModel.isRecordingProperty.not())
-                        )
+                        action { viewModel.stop() }
+                        disableProperty().bind(viewModel.isRecordingProperty.not())
                     }
                 }
             }

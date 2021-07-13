@@ -15,13 +15,13 @@ class SimplePlayer(private val audio: File) {
 
     fun play() {
         if (isPlaying) return
+        isPlaying = true
 
         runCatching {
             val stream = AudioSystem.getAudioInputStream(audio)
             player = AudioSystem.getSourceDataLine(AUDIO_FORMAT, mixer)
             player?.let { _player ->
                 Thread {
-                    isPlaying = true
                     _player.open()
                     _player.start()
 
@@ -37,17 +37,20 @@ class SimplePlayer(private val audio: File) {
         }
             .onFailure {
                 println(it)
+                stop()
             }
     }
 
     fun stop() {
         if (!isPlaying) return
+        isPlaying = false
+
         player?.let { _player ->
-            isPlaying = false
-            stopCallback?.invoke()
             _player.stop()
             _player.drain()
             _player.close()
+
+            stopCallback?.invoke()
         }
     }
 

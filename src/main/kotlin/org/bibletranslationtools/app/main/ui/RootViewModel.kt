@@ -17,43 +17,40 @@ class RootViewModel: ViewModel() {
     val recorders = observableListOf<Mixer.Info>()
     val selectedRecorder = SimpleObjectProperty<Mixer.Info>()
 
-    private val playerProperty = SimpleObjectProperty<SimplePlayer>()
-    private val recorderProperty = SimpleObjectProperty<SimpleRecorder>()
-    private val recorderPlayerProperty = SimpleObjectProperty<SimplePlayer>()
+    val playerProperty = SimpleObjectProperty<SimplePlayer>()
+    val recorderProperty = SimpleObjectProperty<SimpleRecorder>()
 
     val isPlayingProperty = SimpleBooleanProperty(false)
-    val isRecorderPlayingProperty = SimpleBooleanProperty(false)
     val isRecordingProperty = SimpleBooleanProperty(false)
 
     private val audioDevices = AudioDevices()
 
     init {
-        loadPlayerList()
-        loadRecorderList()
+        loadPlayMixers()
+        loadRecordMixers()
 
         loadPlayer()
         loadRecorder()
-        loadRecorderPlayer()
     }
 
-    private fun loadPlayerList() {
-        val devices = audioDevices.getPlayers()
-        players.setAll(devices)
+    private fun loadPlayMixers() {
+        val mixers = audioDevices.getPlayers()
+        players.setAll(mixers)
     }
 
-    private fun loadRecorderList() {
-        val devices = audioDevices.getRecorders()
-        recorders.setAll(devices)
+    private fun loadRecordMixers() {
+        val mixers = audioDevices.getRecorders()
+        recorders.setAll(mixers)
     }
 
-    fun setPlayer(mixer: Mixer.Info) {
+    fun setPlayMixer(mixer: Mixer.Info) {
         playerProperty.value?.let {
             it.stop()
             it.setMixer(mixer)
         }
     }
 
-    fun setRecorder(mixer: Mixer.Info) {
+    fun setRecordMixer(mixer: Mixer.Info) {
         recorderProperty.value?.let {
             it.stop()
             it.setMixer(mixer)
@@ -61,56 +58,44 @@ class RootViewModel: ViewModel() {
     }
 
     fun play() {
-        isPlayingProperty.set(true)
-        playerProperty.value?.play()
-        playerProperty.value?.onStop {
-            isPlayingProperty.set(false)
+        playerProperty.value?.let { player ->
+            isPlayingProperty.set(true)
+            player.play()
+            player.onStop {
+                isPlayingProperty.set(false)
+            }
         }
     }
 
     fun stop() {
         playerProperty.value?.stop()
-    }
-
-    fun recordAudio() {
-        isRecordingProperty.set(true)
-        recorderProperty.value?.record()
-        recorderProperty.value?.onStop {
-            isRecordingProperty.set(false)
-        }
-    }
-
-    fun stopRecording() {
         recorderProperty.value?.stop()
-        recorderPlayerProperty.value?.stop()
-        loadRecorderPlayer()
     }
 
-    fun playRecording() {
-        isRecorderPlayingProperty.set(true)
-        recorderPlayerProperty.value?.play()
-        recorderPlayerProperty.value?.onStop {
-            isRecorderPlayingProperty.set(false)
+    fun record() {
+        recorderProperty.value?.let { recorder ->
+            isRecordingProperty.set(true)
+            recorder.record()
+            recorder.onStop {
+                isRecordingProperty.set(false)
+                loadPlayer()
+            }
         }
     }
 
     private fun loadRecorder() {
-        val recording = File("recording.wav")
-        val recorder = SimpleRecorder(recording)
-        recorderProperty.set(recorder)
-    }
-
-    private fun loadRecorderPlayer() {
-        val recording = File("recording.wav")
-        if (recording.exists()) {
-            val player = SimplePlayer(recording)
-            recorderPlayerProperty.set(player)
+        if (recorderProperty.value == null) {
+            val recording = File("recording.wav")
+            val recorder = SimpleRecorder(recording)
+            recorderProperty.set(recorder)
         }
     }
 
     private fun loadPlayer() {
-        val audioFile = File(resources.url("/audio/audio.wav").file)
-        val player = SimplePlayer(audioFile)
-        playerProperty.set(player)
+        val audioFile = File("recording.wav")
+        if (playerProperty.value == null && audioFile.exists()) {
+            val player = SimplePlayer(audioFile)
+            playerProperty.set(player)
+        }
     }
 }

@@ -33,16 +33,19 @@ class SimpleRecorder(private val audio: File) {
         }
             .onFailure {
                 println(it)
+                stop()
             }
     }
 
     fun stop() {
         if (!isRecording) return
+
         recorder?.let { _recorder ->
-            isRecording = false
-            stopCallback?.invoke()
             _recorder.stop()
             _recorder.close()
+
+            isRecording = false
+            stopCallback?.invoke()
         }
     }
 

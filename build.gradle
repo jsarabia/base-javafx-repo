@@ -18,7 +18,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
     id 'org.openjfx.javafxplugin' version "$javafx_plugin_version"
-    id "com.github.johnrengelman.shadow" version "5.2.0"
+    id "com.github.johnrengelman.shadow" version "$shadow_plugin_version"
 }
 
 apply plugin: 'kotlin'
@@ -54,6 +54,11 @@ dependencies {
     implementation "org.kordamp.ikonli:ikonli-fontawesome5-pack:$ikonli_version"
     implementation "org.kordamp.ikonli:ikonli-materialdesign-pack:$ikonli_version"
     implementation "org.kordamp.ikonli:ikonli-material-pack:$ikonli_version"
+
+    //OpenJFX cross-platform fat jar dependencies
+    runtimeOnly "org.openjfx:javafx-graphics:$javafx_plugin_version:win"
+    runtimeOnly "org.openjfx:javafx-graphics:$javafx_plugin_version:linux"
+    runtimeOnly "org.openjfx:javafx-graphics:$javafx_plugin_version:mac"
 }
 
 group 'org.bibletranslationtools'
@@ -68,7 +73,7 @@ compileTestKotlin {
 }
 
 javafx {
-    version = "$javafx_version"
+    version = '11'
     modules = ['javafx.controls', 'javafx.fxml']
 }
 
