@@ -30,6 +30,10 @@ repositories {
 
     // TornadoFX 2.0 Snapshot
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 dependencies {
@@ -59,6 +63,11 @@ dependencies {
     runtimeOnly "org.openjfx:javafx-graphics:$javafx_plugin_version:win"
     runtimeOnly "org.openjfx:javafx-graphics:$javafx_plugin_version:linux"
     runtimeOnly "org.openjfx:javafx-graphics:$javafx_plugin_version:mac"
+
+    implementation name: "audio"
+
+    implementation "io.reactivex.rxjava2:rxkotlin:2.4.0"
+    implementation "com.jakewharton.rxrelay2:rxrelay:2.1.0"
 }
 
 group 'org.bibletranslationtools'

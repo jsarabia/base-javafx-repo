@@ -14,7 +14,9 @@ class SimplePlayer(private val audio: File) {
     private var stopCallback: (() -> Unit)? = null
 
     fun play() {
-        if (isPlaying) return
+        if (isPlaying) {
+            return
+        }
         isPlaying = true
 
         runCatching {
@@ -27,13 +29,12 @@ class SimplePlayer(private val audio: File) {
 
                     val bufferBytes = ByteArray(bufferSize)
                     var readBytes: Int
-
                     while (stream.read(bufferBytes).also { readBytes = it } != -1 && isPlaying) {
                         _player.write(bufferBytes, 0, readBytes)
                     }
                     stop()
                 }.start()
-            }
+            } ?: kotlin.run { println("player null") }
         }
             .onFailure {
                 println(it)
