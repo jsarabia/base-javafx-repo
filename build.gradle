@@ -57,6 +57,12 @@ dependencies {
 
 group 'org.bibletranslationtools'
 
+sourceCompatibility = 11
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "11"
+}
+
 javafx {
     version = "$javafx_version"
     modules = ['javafx.controls', 'javafx.fxml']
